@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="./dbasereader-icon.png" 
+				type="Source" 
+				xmlns="http://knime.org/node/v2.8" 
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+				xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+				
+    <name>dBase Reader</name>
+    
+    <shortDescription>
+        Reads data from a dBase database file or URL location. 
+        Upon executing the node will scan the input file to determine number 
+        and types of the columns and output a table with the auto-guessed structure.
+    </shortDescription>
+    
+    <fullDescription>
+        <intro>
+        Reads a data table from a dBase file format. 
+        The support of this old format is minimalistic: we only read data, without query nor index.
+        </intro>
+        
+        <tab name="Settings">
+           <option name="Input location">the path to the dBase file to read</option>
+           <option name="Read rows marked as deleted">when rows are marked as deleted in the file, should we still read them?</option>
+       	</tab>
+       	
+     	<tab name="Limit rows">
+           <option name="Limit rows">the maximum count of rows to read from the files; only the first N rows will be read</option>
+       	</tab>
+  
+    </fullDescription>
+    
+    <ports>
+        <outPort index="0" name="table">Table read from the dBase file</outPort>
+    </ports>
+    
+</knimeNode>
