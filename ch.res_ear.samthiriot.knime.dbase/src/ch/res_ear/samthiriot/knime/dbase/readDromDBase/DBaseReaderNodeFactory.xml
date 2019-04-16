@@ -15,8 +15,17 @@
     
     <fullDescription>
         <intro>
-        Reads a data table from a dBase file format. 
+        Reads a data table from a <a href="https://en.wikipedia.org/wiki/DBase">dBase file format</a>. 
         The support of this old format is minimalistic: we only read data, without query nor index.
+        Each data field of the database file is translated as a KNIME column of the corresponding type: 
+        FLOAT and NUMBER produce Double columns; 
+        CHARACTER and MEMO produce String columns;
+        LOGICAL are mapped to Boolean columns;
+        DATE becomes a DataTime column;
+        PICTURE, GENERAL and BINARY become Binary columns. 
+        
+        The actual computation is done by the <a href="http://dans-dbf-lib.sourceforge.net/">DANS DBF Library</a>.
+        
         </intro>
         
         <tab name="Settings">

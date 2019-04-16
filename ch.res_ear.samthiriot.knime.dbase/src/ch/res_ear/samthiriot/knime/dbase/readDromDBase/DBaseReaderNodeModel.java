@@ -286,7 +286,7 @@ public class DBaseReaderNodeModel extends NodeModel {
             
         	currentLine++;
         	
-        	if (currentLine % 100 == 0) { // TODO granularity?
+        	if (currentLine % 10 == 0) { 
 	            // check if the execution monitor was canceled
 	            exec.checkCanceled();
 	            exec.setProgress(

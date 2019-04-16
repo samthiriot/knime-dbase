@@ -17,9 +17,20 @@
    <extension
          point="org.knime.workbench.repository.nodes">
       <node
-            category-path="/gosp/read"
+            category-path="/community/dbase"
             factory-class="ch.res_ear.samthiriot.knime.dbase.readDromDBase.DBaseReaderNodeFactory"
             id="ch.res_ear.samthiriot.knime.dbase.readDromDBase.DBaseReaderNodeFactory"/>
+   </extension>
+   <extension
+         point="org.knime.workbench.repository.categories">
+      <category
+            description="read data stored in DBase file format"
+            icon="src/ch/res_ear/samthiriot/knime/dbase/readDromDBase/dbasereader-base.png"
+            level-id="dbase"
+            locked="false"
+            name="DBase"
+            path="/community">
+      </category>
    </extension>
    
 </plugin>

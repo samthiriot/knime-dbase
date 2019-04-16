@@ -3,7 +3,7 @@
       id="ch.res_ear.samthiriot.knime.dbase.feature"
       label="KNIME-dBase nodes"
       version="1.0.0.qualifier"
-      provider-name="Samuel Thiriot">
+      provider-name="EIFER">
 
    <description>
       KNIME nodes to open dBase files.
