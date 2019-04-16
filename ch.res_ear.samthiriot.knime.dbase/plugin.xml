@@ -18,8 +18,8 @@
          point="org.knime.workbench.repository.nodes">
       <node
             category-path="/gosp/read"
-            factory-class="ch.res_ear.samthiriot.gosp.gpl.readDromDBase.DBaseReaderNodeFactory"
-            id="ch.res_ear.samthiriot.gosp.gpl.readDromDBase.DBaseReaderNodeFactory"/>
+            factory-class="ch.res_ear.samthiriot.knime.dbase.readDromDBase.DBaseReaderNodeFactory"
+            id="ch.res_ear.samthiriot.knime.dbase.readDromDBase.DBaseReaderNodeFactory"/>
    </extension>
    
 </plugin>

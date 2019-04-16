@@ -16,15 +16,15 @@ import org.osgi.framework.BundleContext;
  *
  * @author Samuel Thiriot
  */
-public class GoSPGPLPlugin extends Plugin {
+public class KnimeDBasePlugin extends Plugin {
 	
     // The shared instance.
-    private static GoSPGPLPlugin plugin;
+    private static KnimeDBasePlugin plugin;
 
     /**
      * The constructor.
      */
-    public GoSPGPLPlugin() {
+    public KnimeDBasePlugin() {
         super();
         plugin = this;
     }
@@ -58,7 +58,7 @@ public class GoSPGPLPlugin extends Plugin {
      * 
      * @return Singleton instance of the Plugin
      */
-    public static GoSPGPLPlugin getDefault() {
+    public static KnimeDBasePlugin getDefault() {
         return plugin;
     }
 

@@ -690,6 +690,13 @@ Public License instead of this License.  But first, please read
       <discovery label="EIFER website" url="https://www.eifer.kit.edu/"/>
    </url>
 
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.knime.workbench.core"/>
+      <import plugin="org.knime.workbench.repository"/>
+      <import plugin="org.knime.base"/>
+   </requires>
+
    <plugin
          id="ch.res_ear.samthiriot.knime.dbase"
          download-size="0"
