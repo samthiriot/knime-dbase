@@ -46,6 +46,7 @@ public class DBaseReaderNodeDialog extends NodeDialogPane {
     private final JCheckBox m_limitRowsChecker;
     private final JSpinner m_limitRowsSpinner;
     private final JCheckBox m_readDeletedRows;
+    private final JCheckBox m_trimStrings;
 
     /**
      * New pane for configuring DBaseReader node dialog.
@@ -57,7 +58,7 @@ public class DBaseReaderNodeDialog extends NodeDialogPane {
         
         
         m_filePanel =
-                new FilesHistoryPanel(createFlowVariableModel(DBaseReaderConfig.CFG_URL, FlowVariable.Type.STRING),
+                new FilesHistoryPanel(createFlowVariableModel("url", FlowVariable.Type.STRING),
                     "dbf_read", LocationValidation.FileInput, ".dbf", ".dbase");
         m_filePanel.setDialogType(JFileChooser.OPEN_DIALOG);
         m_filePanel.setShowConnectTimeoutField(false); // TODO ?
@@ -72,6 +73,8 @@ public class DBaseReaderNodeDialog extends NodeDialogPane {
         });
         
         m_readDeletedRows = new JCheckBox("Read rows marked as deleted");
+        
+        m_trimStrings = new JCheckBox("Trim strings");
         
         //m_limitRowsChecker.doClick();
 
@@ -141,9 +144,8 @@ public class DBaseReaderNodeDialog extends NodeDialogPane {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         optionsPanel.add(m_readDeletedRows);
-        
-        // TODO add option read deleted 
-        
+        optionsPanel.add(m_trimStrings);
+                
         //empty panel to eat up extra space
         gbc.gridy += 1;
         gbc.gridx = 0;
@@ -180,6 +182,7 @@ public class DBaseReaderNodeDialog extends NodeDialogPane {
         }
         
         m_readDeletedRows.setSelected(config.getReadDeletedRows());
+        m_trimStrings.setSelected(config.getTrimStrings());
     }
     
 
@@ -196,6 +199,7 @@ public class DBaseReaderNodeDialog extends NodeDialogPane {
         config.setLimitRowsCount(limitRows);
 
         config.setReadDeletedRows(m_readDeletedRows.isSelected());
+        config.setTrimStrings(m_trimStrings.isSelected());
         
         config.saveSettingsTo(settings);
         m_filePanel.addToHistory();

@@ -6,10 +6,6 @@ import org.knime.core.node.NodeSettingsWO;
 
 public final class DBaseReaderConfig {
 
-
-    /** Config key for the URL property. */
-    static final String CFG_URL = "url";
-    
     private String m_location;
 
     /**
@@ -18,20 +14,25 @@ public final class DBaseReaderConfig {
     private int m_limitRowsCount;
     
     private boolean m_readDeletedRows;
+    
+    private boolean m_trimStrings;
 
     public DBaseReaderConfig() {
     	m_location = null;
     	m_limitRowsCount = -1;
     	m_readDeletedRows = false;
+    	m_trimStrings = true;
+
     }
     
     /** Load settings, used in dialog (no errors).
      * @param settings To load from.
      */
     public void loadSettingsInDialog(final NodeSettingsRO settings) {
-        m_location = settings.getString(CFG_URL, null);
+        m_location = settings.getString("url", null);
         m_limitRowsCount = settings.getInt("limitRowsCount", m_limitRowsCount);
         m_readDeletedRows = settings.getBoolean("readDeletedRows", m_readDeletedRows);
+        m_trimStrings = settings.getBoolean("trimStrings", m_trimStrings);
     }
 
     /** Load in model, fail if settings are invalid.
@@ -40,9 +41,10 @@ public final class DBaseReaderConfig {
      */
     public void loadSettingsInModel(final NodeSettingsRO settings)
         throws InvalidSettingsException {
-        m_location = settings.getString(CFG_URL);
+        m_location = settings.getString("url");
         m_limitRowsCount = settings.getInt("limitRowsCount", m_limitRowsCount);
         m_readDeletedRows = settings.getBoolean("readDeletedRows", m_readDeletedRows);
+        m_trimStrings = settings.getBoolean("trimStrings", m_trimStrings);
 
     }
 
@@ -51,11 +53,11 @@ public final class DBaseReaderConfig {
      */
     public void saveSettingsTo(final NodeSettingsWO settings) {
         if (m_location != null) {
-            settings.addString(CFG_URL, m_location.toString());
+            settings.addString("url", m_location.toString());
         }
         settings.addInt("limitRowsCount", m_limitRowsCount);
         settings.addBoolean("readDeletedRows", m_readDeletedRows);
-        
+        settings.addBoolean("trimStrings", m_trimStrings);
     }
 
     public String getLocation() {
@@ -81,5 +83,15 @@ public final class DBaseReaderConfig {
     public void setReadDeletedRows(final boolean readDeletedRows) {
     	m_readDeletedRows = readDeletedRows;
     }
+
+	public boolean getTrimStrings() {
+		return m_trimStrings;
+	}
+
+	public void setTrimStrings(boolean m_trimStrings) {
+		this.m_trimStrings = m_trimStrings;
+	}
+    
+    
     
 }

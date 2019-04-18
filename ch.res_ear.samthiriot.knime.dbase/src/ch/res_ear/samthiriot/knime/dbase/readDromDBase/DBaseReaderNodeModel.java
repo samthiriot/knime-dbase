@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.activity.InvalidActivityException;
+
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
@@ -21,6 +23,8 @@ import org.knime.core.data.def.BooleanCell.BooleanCellFactory;
 import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.DoubleCell.DoubleCellFactory;
+import org.knime.core.data.def.IntCell;
+import org.knime.core.data.def.IntCell.IntCellFactory;
 import org.knime.core.data.def.StringCell;
 import org.knime.core.data.def.StringCell.StringCellFactory;
 import org.knime.core.node.BufferedDataContainer;
@@ -91,11 +95,14 @@ public class DBaseReaderNodeModel extends NodeModel {
     	DataType knimeType;
     	    	
     	switch (currentField.getType()) {
-    		//knimeType = IntCell.TYPE;
-    		//break;
-    	case NUMBER: // TODO int ? really? 
+    		
+    	case NUMBER: 
     	case FLOAT:
-    		knimeType = DoubleCell.TYPE;
+    		// this is an integer in case the count of decimals is null
+    		if (currentField.getDecimalCount() == 0)
+    			knimeType = IntCell.TYPE;
+    		else
+    			knimeType = DoubleCell.TYPE;
     		break;
     	case CHARACTER:
     	case MEMO:
@@ -146,7 +153,11 @@ public class DBaseReaderNodeModel extends NodeModel {
 	    return allColSpecs;
     }
     
-    private final static DataCell[] decodeDBFields(final List<Field> fields, Record currentRecord, ExecutionContext ctxt) {
+    private final static DataCell[] decodeDBFields(
+    									final List<Field> fields, 
+    									Record currentRecord, 
+    									ExecutionContext ctxt,
+    									boolean trimStrings) {
     	
     	BinaryObjectCellFactory binaryCellFactory = new BinaryObjectCellFactory(ctxt);
     	
@@ -161,11 +172,17 @@ public class DBaseReaderNodeModel extends NodeModel {
         		//break;
         	case NUMBER:
         	case FLOAT:
-        		results[currentIdx] = DoubleCellFactory.create(currentRecord.getNumberValue(currentField.getName()).doubleValue());
+        		if (currentField.getDecimalCount() == 0)
+        			results[currentIdx] = IntCellFactory.create(currentRecord.getNumberValue(currentField.getName()).intValue());
+        		else 
+        			results[currentIdx] = DoubleCellFactory.create(currentRecord.getNumberValue(currentField.getName()).doubleValue());
         		break;
         	case CHARACTER:
         	case MEMO:
-        		results[currentIdx] = StringCellFactory.create(currentRecord.getStringValue(currentField.getName()));
+        		String strVal = currentRecord.getStringValue(currentField.getName());
+        		if (trimStrings)
+        			strVal = strVal.trim();
+        		results[currentIdx] = StringCellFactory.create(strVal);
         		break;
         	case LOGICAL:
         		results[currentIdx] = BooleanCellFactory.create(currentField.getName());
@@ -209,14 +226,19 @@ public class DBaseReaderNodeModel extends NodeModel {
     	return results;
     }
 
-    protected Table getDBaseTable() {
+    protected Table getDBaseTable() throws InvalidSettingsException {
  
     	final String filename = m_config.getLocation();
+    	if (filename == null)
+	    	throw new InvalidSettingsException("No filename provided");
+	    	
  
     	logger.debug("opening DBaser file "+filename);
 
         File file = new File(filename);
-        
+        if (!file.canRead())
+	    	throw new InvalidSettingsException("Cannot read file "+file);
+
         // open the table
         Table table = new Table(file);
 		try {
@@ -241,7 +263,6 @@ public class DBaseReaderNodeModel extends NodeModel {
             final ExecutionContext exec) throws Exception {
 
         // open the table
-
     	Table table = getDBaseTable();
 
     	// read the fields from the table...
@@ -261,6 +282,7 @@ public class DBaseReaderNodeModel extends NodeModel {
         
         
         final boolean readDeleted = m_config.getReadDeletedRows();
+        final boolean trimStrings = m_config.getTrimStrings();
         
         Iterator<Record> itRecords = table.recordIterator(readDeleted);
         
@@ -280,7 +302,7 @@ public class DBaseReaderNodeModel extends NodeModel {
         	container.addRowToTable(
         			new DefaultRow(
 	        			new RowKey("Row " + currentLine), 
-	        			decodeDBFields(fields, currentRecord, exec)
+	        			decodeDBFields(fields, currentRecord, exec, trimStrings)
 	        			)
         			);
             
@@ -327,7 +349,7 @@ public class DBaseReaderNodeModel extends NodeModel {
     	
     	try {
 	    	Table table = getDBaseTable();
-	
+
 	    	// read the fields from the table...
 		    final List<Field> fields = table.getFields();
 		    
@@ -340,8 +362,10 @@ public class DBaseReaderNodeModel extends NodeModel {
 	        return outputSpecs;
 	        
     	} catch (RuntimeException e) {
+    		e.printStackTrace();
     		// if anything goes wrong, we are not able to provide more detailed info
-            return new DataTableSpec[]{null};
+    		throw new InvalidSettingsException("error while reading the table: "+e.getMessage());
+            //return new DataTableSpec[]{null};
     	}
         
     }

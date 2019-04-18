@@ -31,6 +31,7 @@
         <tab name="Settings">
            <option name="Input location">the path to the dBase file to read</option>
            <option name="Read rows marked as deleted">when rows are marked as deleted in the file, should we still read them?</option>
+           <option name="Trim Strings">remove the spaces and tabulations at the beginning and end of string (character and memo) records</option>
        	</tab>
        	
      	<tab name="Limit rows">
