@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.activity.InvalidActivityException;
-
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
