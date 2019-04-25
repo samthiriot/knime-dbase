@@ -344,9 +344,9 @@ public class DBaseReaderNodeModel extends NodeModel {
     	
     	// user parameters are available.
     	// we try to decode the fields without reading the actual data.
-    	
+    	Table table = null;
     	try {
-	    	Table table = getDBaseTable();
+	    	table = getDBaseTable();
 
 	    	// read the fields from the table...
 		    final List<Field> fields = table.getFields();
@@ -364,6 +364,13 @@ public class DBaseReaderNodeModel extends NodeModel {
     		// if anything goes wrong, we are not able to provide more detailed info
     		throw new InvalidSettingsException("error while reading the table: "+e.getMessage());
             //return new DataTableSpec[]{null};
+    	} finally {
+    		if (table != null)
+				try {
+					table.close();
+				} catch (IOException e) {
+					logger.warn("error when closing the dbase file "+ m_config.getLocation()+": "+e.getMessage());
+				}
     	}
         
     }
