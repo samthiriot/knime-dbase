@@ -9,6 +9,17 @@
       KNIME nodes to open dBase files.
    </description>
 
+   <copyright>
+      (c) Copyright Samuel Thiriot for EIFER 2018-2022. All rights reserved.
+
+EIFER:
+Europäisches Institut für Energieforschung EDF-KIT EWIV
+(European Institute for Energy Research)
+Emmy-Noether-Strasse 11, ground floor
+D-76131 Karlsruhe
+Germany
+   </copyright>
+
    <license url="http://www.gnu.org/licenses/gpl-3.0.txt">
       GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
